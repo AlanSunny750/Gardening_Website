@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+    width: 8px;
+    position: absolute;
+    top: 0;
+    right: 0;
+ }
+ 
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+ 
+body::-webkit-scrollbar-thumb {
+    background: rgb(114, 184, 222);
+    border-radius: 10px;
+ }
+ 
+body::-webkit-scrollbar-thumb:hover {
+    background: rgb(199, 199, 199);
+ }
