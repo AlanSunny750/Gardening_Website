@@ -8,9 +8,3 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>,
 )
-
-/*  dark blue #023E8A,
-    medium blue #0077B6,
-    light blue #90E0EF,
-    pale blue #CAF0F8
-*/

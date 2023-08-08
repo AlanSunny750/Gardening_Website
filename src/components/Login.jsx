@@ -1,22 +1,22 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
+
+  let url = 'http://localhost:3000';
+  let appUrl = 'http://localhost:5173';
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    const loginInfo = {
-      Email: email,
-      Pass: password
-    };
+  const HandleLogin = () => {
 
-    fetch(url + '/login.html', {
+    fetch(url + '/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(loginInfo)
+      body: JSON.stringify({email, password})
     })
       .then((response) => response.text())
       .then((data) => {
@@ -26,7 +26,7 @@ const Login = () => {
           alert('Incorrect password');
         } else if (data === '4') {
 
-          window.location.href = url + '/client.html';
+          window.location.href = appUrl;
         }
       })
       .catch((err) => console.log(err));
@@ -58,10 +58,10 @@ const Login = () => {
         <div className="go flex gap-10 items-center w-[280px]">
           <div
             className="btn bg-green-600 hover:bg-green-500 transition duration-400 text-white text-lg w-20 h-10 flex items-center justify-center rounded-md cursor-pointer font-bold"
-            onClick={handleLogin}
+            onClick={HandleLogin}
           > Login </div>
           
-          <a href="./signup" className="ml-4 underline text-blue-700">Register?</a>
+          <Link to="/signup" className="ml-4 underline text-blue-700">Register?</Link>
         </div>
       </div>
     </div>

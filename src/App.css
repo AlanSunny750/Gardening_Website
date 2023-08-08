@@ -1,5 +1,7 @@
 * {
     box-sizing: border-box;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    user-select: none;
 }
 body {
     overflow-x: hidden;
@@ -10,6 +12,7 @@ body::-webkit-scrollbar {
     position: absolute;
     top: 0;
     right: 0;
+    background: #ffffff9f;
  }
  
 body::-webkit-scrollbar-track {
@@ -17,10 +20,72 @@ body::-webkit-scrollbar-track {
 }
  
 body::-webkit-scrollbar-thumb {
-    background: rgb(114, 184, 222);
+    background: rgb(78, 78, 78);
     border-radius: 10px;
  }
  
 body::-webkit-scrollbar-thumb:hover {
-    background: rgb(199, 199, 199);
+    background: rgb(48, 48, 48);
+    cursor: pointer;
  }
+
+ /* navbar */
+
+
+
+ .NAVBAR {
+    background-color: #4caf50;
+    transition: top 0.3s;
+  }
+  
+  .NAV_ITEMS {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
+  
+  .LOGO_CONTAINER {
+    display: flex;
+    align-items: center;
+  }
+  
+  .LOGO {
+    font-size: 18px;
+    margin-left: 1rem;
+  }
+  
+  .ANCHORS {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .AUTH {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  /* Add media queries for responsiveness */
+  @media (max-width: 768px) {
+    .NAV_ITEMS {
+      flex-direction: column;
+    }
+  
+    .ANCHORS {
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+      gap: 10px;
+    }
+  
+    .AUTH {
+      margin-top: 10px;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+  }
+  
