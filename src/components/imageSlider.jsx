@@ -5,9 +5,9 @@ function ImageSlider() {
     let [imgCount, setImgCount] = useState(0);
 
     let images = [
-        'images&&icons/img0.png',
-        'images&&icons/img1.png',
-        'images&&icons/img2.png'
+        './src/assets/images/img0.png',
+        './src/assets/images/img1.png',
+        './src/assets/images/img2.png'
     ]
 
     const next = () => {
@@ -25,7 +25,7 @@ function ImageSlider() {
         } else {
             setImgCount(imgCount = images.length - 1)
         }
-        console.log(imgCount)
+        console.log(images[imgCount])
     }
 
 
