@@ -1,43 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Weather() {
-  const todayWeather = {
-    temperature: '25°C',
-    condition: 'Sunny',
-  };
+  const [city, setCity] = useState('london'); // set a default city
+  const [weather, setWeather] = useState({});
 
-  const tomorrowWeather = {
-    temperature: '22°C',
-    condition: 'Partly Cloudy',
-  };
+  const API_KEY = '318239f4451f31c089926250a80b0099';
+  const BASE_URL = 'https://api.openweathermap.org/data/2.5/';
+
+  useEffect(() => {
+    fetch(`${BASE_URL}weather?q=${city}&appid=${API_KEY}`)
+      .then(response => response.json())
+      .then(data => {
+          setWeather(data);
+          console.log(data);
+      })
+      .catch(err => console.log(err));
+  }, [city]); // This fetch will run every time the 'city' state changes
 
   const perfectSeasonCrop = 'Corn';
-  
-  // Determine plants based on weather condition
+
   let recommendedPlants = [];
-  if (todayWeather.condition === 'Sunny') {
+  
+  if (weather?.weather?.[0]?.main === 'Sunny') {
     recommendedPlants = ['Sunflowers', 'Marigolds', 'Lavender'];
-  } else if (todayWeather.condition === 'Partly Cloudy') {
+  } else if (weather?.weather?.[0]?.main === 'Partly Cloudy') {
     recommendedPlants = ['Tomatoes', 'Peppers', 'Lettuce'];
+  } else if (weather?.weather?.[0]?.main === 'Clouds') {
+    recommendedPlants = ['Kale', 'Broccoli', 'Brussels Sprouts'];
   }
+  
 
   return (
     <div>
-      {/* Weather Section */}
       <section className="w-full h-[400px] bg-gradient-to-r from-blue-400 to-blue-600 text-white p-8 flex flex-col justify-center items-center">
         <h1 className="text-4xl font-bold mb-2">Today's Weather</h1>
 
+      <input 
+      className='input'
+      type="text"
+      placeholder='Current city'
+      onChange={(e) => setCity(e.target.value)}
+      />
+
         <div className="flex justify-center items-center space-x-6 mt-4">
-          {/* Today's Weather */}
+          {/*  Weather today */}
           <div className="TODAY">
-            <p className="text-2xl">Temperature: {todayWeather.temperature}</p>
-            <p className="text-2xl">Condition: {todayWeather.condition}</p>
+            <p className="text-2xl">Temperature: {weather?.main?.temp}</p>
+            <p className="text-2xl">Condition: {weather?.weather?.[0]?.main}</p>
           </div>
 
-          {/* Tomorrow's Weather */}
+          {/*  Weather tomorrow */}
+          {/* i kept this section but remember your not fetching tomorrow's weather with the current api call */}
           <div className="TOMORROW">
-            <p className="text-2xl">Temperature: {tomorrowWeather.temperature}</p>
-            <p className="text-2xl">Condition: {tomorrowWeather.condition}</p>
+            <p className="text-2xl">Temperature: {weather?.main?.temp}</p>
+            <p className="text-2xl">Condition: {weather?.weather?.[0]?.main}</p>
           </div>
         </div>
 
@@ -47,7 +63,6 @@ function Weather() {
         </div>
       </section>
 
-      {/* Plants in Perfect Weather Section */}
       <section className="bg-green-100 p-10 text-center">
         <h2 className="text-4xl font-semibold mb-4">Plants in Perfect Weather</h2>
         <p className="text-lg mb-6">Discover plants that thrive in today's weather conditions:</p>
@@ -62,9 +77,7 @@ function Weather() {
           ))}
         </div>
       </section>
-      
     </div>
-
   );
 }
 

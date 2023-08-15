@@ -4,16 +4,12 @@ function Header() {
         <>
         
         <div 
-        className="HEADER mt-20 w-[calc(100%-20px)] mr-auto ml-auto 
-        bg-[url(./src/assets/images/HBG-high.jpg)] bg-no-repeat bg-cover 
-        ">
+        className="HEADER w-full h-[100%] bg-[url(./src/assets/images/HBG-high.jpg)]
+        bg-no-repeat bg-cover m-0 pr-12 pl-12 pb-12">
             <div className="flex flex-col gap-12 text-4xl font-bold text-[#2D3748] p-[40px]">
 
-                <h1 className="H1">
-                    <p className=" text-[#2D3748] text-3xl">  Welcome to your backyard!</p>
-                </h1>
 
-                <div className="text">
+                <div className="text mt-24">
                     <p> GROW URBAN GARDENS! </p>
                     <p> WITH </p>
                     <p> GARDEN.COM </p>
