@@ -28,8 +28,6 @@ function Navbar() {
         };
     }, [isMainLocation]);
 
-
-
     
     return (
         <div
@@ -47,12 +45,14 @@ function Navbar() {
             >
                 <div 
                 className="LOGO_CONTAINER">
+                    <abbr className='no-underline' title="Garden stash keeps your cash">
                     <div 
-                    className="LOGO p-1 text-[18px] ml-4 font-bold"
-                    > Gardener.com </div>
+                    className="LOGO p-1 text-[18px] ml-4 font-bold border-l-2 border-l-gray-300 pl-2 cursor-pointer"
+                    > Garden Stash </div>
+                    </abbr>
                 </div>
                 <div 
-                className="ANCHERS flex gap-20 ml-auto mr-auto "
+                className="ANCHERS flex gap-12 ml-auto mr-auto "
                 >
                     <Link 
                     to="/" 
@@ -63,8 +63,13 @@ function Navbar() {
                     className="hover:bg-white hover:text-black transition duration-450
                     rounded-[5px] py-[8px] px-[12px] text-center"
                     > Plants </Link>
+                    <Link 
+                    to="/comunity" 
+                    className="hover:bg-white hover:text-black transition duration-450
+                    rounded-[5px] py-[8px] px-[12px] text-center"
+                    > Comunity </Link>
 
-                    <a href='./phaser/game.html'
+                    <a href='./phaser/GardenPlanner.html'
                     className="hover:bg-white hover:text-black transition duration-450
                     rounded-[5px] py-[8px] px-[12px] text-center"> Your Garden </a>
                 </div>

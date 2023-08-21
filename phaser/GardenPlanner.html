@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden planner</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <link rel="stylesheet" href="GardenPlanner.css">
+</head>
+<body>
+    <div id="Canvas"></div>
+    <script>
+        let SceneContainer = document.getElementById('Canvas');
+
+        // da function safha da tolo screen sizono dapara!!
+        // donot remove..!temoprary
+        function resizeScene() {
+            if(window.innerWidth > window.innerHeight) {
+                SceneContainer.style.height = '100%'
+            } else if(window.innerHeight > window.innerWidth) {
+                SceneContainer.style.width = '100%'
+            }
+        }
+
+        window.onload = () => {
+            resizeScene()
+        }
+        
+        const config = {
+            type: Phaser.AUTO,
+            backgroundColor: '#c4c8cf',
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            },
+            parent: 'Canvas',
+            physics: {
+            default: 'arcade',
+            arcade: {
+                debug: false
+            }
+        }
+    };
+
+        const game = new Phaser.Game(config)
+
+        function preload() {
+            // main assets
+            this.load.image('grass', './assets/Grass.png')
+            this.load.image('woodenSideBar', './assets/woodenSideBar.jpeg')
+            this.load.image('btn', './assets/woodenPlate.jpg')
+            this.load.image('resetButton', './assets/Replay.png')
+            this.load.image('confirm_sign', './assets/confirm_sign.png')
+
+            // ./plants golan
+            this.load.image('flower', './assets/plants/flower.png')
+            this.load.image('dark_bush', './assets/plants/dark_bush.png')
+            this.load.image('tree_round_small', './assets/plants/tree_round_small.png')
+            this.load.image('over_growth', './assets/plants/overGrowth.png')
+            this.load.image('mushroom', './assets/plants/mushroom.png')
+            this.load.image('apple_tree', './assets/plants/apple_tree.png')
+
+            // ./ground mzaka
+            this.load.image('pathway', './assets/ground/path_way.png')
+            this.load.image('fence', './assets/ground/fence.png')
+            this.load.image('water', './assets/ground/water.png')
+            this.load.image('grass_path_way', './assets/ground/grass_tile.png')
+            this.load.image('stone_path_way', './assets/ground/stone_path_way.png')
+
+            // ./decor dekoration
+            this.load.image('chopped_plank', './assets/decor/chopped_plank.png')
+            this.load.image('fishing_spot', './assets/decor/fishing_spot.png')
+            this.load.image('pit', './assets/decor/pit.png')
+            this.load.image('statue', './assets/decor/statue.png')
+        }
+
+        // !runs once, evey frame!
+        function create(game) {
+    let sceneWidth = this.sys.game.config.width;
+    let sceneHeight = this.sys.game.config.height;
+
+    const sideBarWidth = 200;
+
+    let borderGraphics = this.add.graphics();
+    borderGraphics.lineStyle(4, 0xFFFF00);
+    borderGraphics.strokeRect(0, 0, sideBarWidth, sceneHeight);
+
+    this.add.image(sideBarWidth / 2, sceneHeight / 2, 'woodenSideBar').setDisplaySize(sideBarWidth, sceneHeight);
+    this.add.image(sceneWidth / 2 + sideBarWidth / 2, sceneHeight / 2, 'grass').setDisplaySize(sceneWidth - sideBarWidth, sceneHeight);
+   
+    let resetButtonSize = 30;
+    const reset = {
+        X: sceneWidth - resetButtonSize - 10,
+        Y: 10 + resetButtonSize / 2,
+        HW: 1
+    }
+    let resetButton = this.add.image(reset.X, reset.Y, 'resetButton')
+    .setInteractive({ useHandCursor: true }).setScale(reset.HW);
+
+    const buttonWidth = sideBarWidth / 3;
+    const buttonHeight = 60;
+
+    let textStyle = {
+        fontSize: '16px',
+        fontWeight: 'bold',
+        fill: '#FFF',
+        align: 'center',
+        strokeThickness: 0.2,
+        fontFamily: 'Serif'
+    };
+
+    let vegBtn = this.add.image(buttonWidth / 2, buttonHeight / 2, 'btn').setDisplaySize(buttonWidth, buttonHeight).setInteractive({ useHandCursor: true });
+    let vegText = this.add.text(vegBtn.x, vegBtn.y, 'Plants', textStyle).setOrigin(0.5);
+
+    let tilesBtn = this.add.image(1.5 * buttonWidth, buttonHeight / 2, 'btn').setDisplaySize(buttonWidth, buttonHeight).setInteractive({ useHandCursor: true });
+    let tilesText = this.add.text(tilesBtn.x, tilesBtn.y, 'Ground', textStyle).setOrigin(0.5);
+
+    let benchesBtn = this.add.image(2.5 * buttonWidth, buttonHeight / 2, 'btn').setDisplaySize(buttonWidth, buttonHeight).setInteractive({ useHandCursor: true });
+    let benchesText = this.add.text(benchesBtn.x, benchesBtn.y, 'Decor', textStyle).setOrigin(0.5);
+
+    const plants = [
+        { name: 'Giant Rose', imageKey: 'flower' },
+        { name: 'Bush', imageKey: 'dark_bush' },
+        { name: 'Mushroom', imageKey: 'mushroom'},
+        { name: 'Round Tree', imageKey: 'tree_round_small'},
+        { name: 'Apple tree', imageKey: 'apple_tree'},
+        { name: 'Overgrown grass', imageKey: 'over_growth'}
+    ];
+
+    const tiles = [
+        { name: 'Pathway', imageKey: 'pathway' },
+        { name: 'water', imageKey: 'water'},
+        { name: 'Stone Pathway', imageKey: 'stone_path_way'},
+        { name: 'Fence', imageKey: 'fence'},
+        { name: 'Grass pathway', imageKey: 'grass_path_way'},
+    ];
+
+    const benches = [
+        { name: 'Statue', imageKey: 'statue' },
+        { name: 'Small pit', imageKey: 'pit'},
+        { name: 'Chopped plank', imageKey: 'chopped_plank'},
+        { name: 'Fishing spot', imageKey: 'fishing_spot'},
+    ];
+
+    let sidebarItems = this.add.group();
+
+    let placedItems = this.physics.add.group();
+    let placedItemsDetails = [];
+
+    function clearSidebarItems() {
+        sidebarItems.clear(true, true);
+    }
+
+    let depth_max = 1000;
+
+    let confirmBackground = this.add.rectangle(0, 0, sceneWidth, sceneHeight, 0x000000, 0.5)
+        .setOrigin(0, 0).setInteractive().setVisible(false).setDepth(depth_max);
+
+    let confirmBox = this.add.image(sceneWidth / 2, sceneHeight / 2, 'confirm_sign')
+        .setDisplaySize(300, 200).setOrigin(0.5).setVisible(false).setDepth(depth_max + 1);   
+
+    let confirmText = this.add.text(sceneWidth / 2, sceneHeight / 2 - 20, 'Delete All?', { fontSize: '20px', color: '0xFFFFFF' })
+        .setOrigin(0.5).setVisible(false).setDepth(depth_max + 2);
+
+    let yesButton = this.add.image(sceneWidth / 2 - 50, sceneHeight / 2 + 50, 'btn')
+        .setOrigin(0.5).setInteractive({ useHandCursor: true }).setVisible(false).setDisplaySize(80, 50).setDepth(depth_max + 1);
+    let yesButtonText = this.add.text(yesButton.x, yesButton.y, 'Yes', textStyle).setOrigin(0.5).setVisible(false).setDepth(depth_max + 1);
+
+    let noButton = this.add.image(sceneWidth / 2 + 50, sceneHeight / 2 + 50, 'btn').setVisible(false)
+        .setOrigin(0.5).setInteractive({ useHandCursor: true }).setVisible(false).setDisplaySize(80, 50).setDepth(depth_max + 1);
+    let noButtonText = this.add.text(noButton.x, noButton.y, 'No', textStyle).setOrigin(0.5).setVisible(false).setDepth(depth_max + 1); 
+
+    const toggleConfirmationMenu = (condition) => {
+        confirmBackground.setVisible(condition);
+        confirmBox.setVisible(condition);
+        confirmText.setVisible(condition);
+        yesButton.setVisible(condition);
+        noButton.setVisible(condition);
+        yesButtonText.setVisible(condition);
+        noButtonText.setVisible(condition);
+    }
+
+    resetButton.on('pointerdown', () => {
+        toggleConfirmationMenu(true)
+
+        yesButton.on('pointerdown', () => {
+            placedItems.clear(true, true);
+            placedItemsDetails = [];
+            toggleConfirmationMenu(false)
+            this.tweens.add({
+                targets: resetButton,
+                angle: 360,
+                duration: 400,
+                onComplete: function() {
+                    resetButton.angle = 0;
+                }
+            });
+        })
+        noButton.on('pointerdown', () => toggleConfirmationMenu(false))
+    });
+
+    function displayItems(scene, category) {
+        clearSidebarItems();
+
+        let items;
+        if (category === 'plants') {  
+            items = plants;
+        } else if (category === 'tiles') {
+            items = tiles;
+        } else if (category === 'benches') {
+            items = benches;
+        }
+
+        const itemSpacing = 100;
+        for (let i = 0; i < items.length; i++) {
+            let item = items[i];
+            let itemImage = scene.add.image(sideBarWidth / 2, 100 + i * itemSpacing, item.imageKey).setInteractive({ useHandCursor: true });
+
+            itemImage.on('pointerdown', function (pointer) {
+                let copiedItem = scene.add.image(pointer.x, pointer.y, item.imageKey).setInteractive();
+                copiedItem.setTint(0xff0000);
+
+                copiedItem.setData('fromSidebar', false);
+
+                scene.input.on('pointermove', function (pointer) {
+                    copiedItem.x = pointer.x;
+                    copiedItem.y = pointer.y;
+                });
+
+                copiedItem.on('pointerup', function () {
+                    this.clearTint();
+                    scene.input.off('pointermove');
+
+                    if (this.x <= sideBarWidth) {
+                        this.destroy();
+                        return;
+                    }
+
+                    placedItems.add(this);
+
+                    if (!this.data.get('fromSidebar')) {
+                        let itemDetails = {
+                            x: this.x,
+                            y: this.y,
+                            imageKey: item.imageKey
+                        };
+                        placedItemsDetails.push(itemDetails);
+                        console.log(placedItemsDetails)
+
+                        this.data.set('fromSidebar', true);
+                    }
+
+                    this.on('pointerdown', function (pointer) {
+                        let offsetX = pointer.x - this.x;
+                        let offsetY = pointer.y - this.y;
+
+                        scene.input.on('pointermove', function (pointer) {
+                            this.x = pointer.x - offsetX;
+                            this.y = pointer.y - offsetY;
+                        }, this);
+
+                        this.on('pointerup', function () {
+                            scene.input.off('pointermove');
+                        });
+                    });
+                });
+            });
+
+            let itemName = scene.add.text(sideBarWidth / 2, 140 + i * itemSpacing, item.name, textStyle).setOrigin(0.5);
+        
+            sidebarItems.add(itemImage);
+            sidebarItems.add(itemName); 
+        }
+    }
+
+    displayItems(this, 'plants');
+}
+
+        
+        function update() {
+
+        }
+    </script>
+</body>
+</html>

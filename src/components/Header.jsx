@@ -4,7 +4,7 @@ function Header() {
         <>
         
         <div 
-        className="HEADER w-full h-[100%] bg-[url(./src/assets/images/HBG-high.jpg)]
+        className="HEADER w-full h-full bg-[url(./src/assets/images/HBG-high.jpg)]
         bg-no-repeat bg-cover m-0 pr-12 pl-12 pb-12">
             <div className="flex flex-col gap-12 text-4xl font-bold text-[#2D3748] p-[40px]">
 

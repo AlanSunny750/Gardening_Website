@@ -5,18 +5,20 @@ function ImageSlider() {
     let [imgCount, setImgCount] = useState(0);
 
     let images = [
-        './src/assets/images/img0.png',
-        './src/assets/images/img1.png',
-        './src/assets/images/img2.png'
+        './src/assets/images/img0.jpg',
+        './src/assets/images/img1.jpg',
+        './src/assets/images/img2.jpg'
     ]
 
+    let imgsLength = images.length - 1;
+    console.log(imgsLength)
+
     const next = () => {
-        if(imgCount < images.length - 1) {
+        if(imgCount < imgsLength) {
             setImgCount(imgCount + 1)
-        } else {
-            setImgCount(imgCount - images.length - 1)
+        } else if(imgCount == imgsLength) {
+            setImgCount(imgCount - imgsLength)
         }
-        console.log(imgCount)
     }
 
     const prev = () => {
@@ -32,21 +34,35 @@ function ImageSlider() {
     return (
         <>
        
-            <div className="IMG_SLIDER relative h-500px w-full bg-red-300 overflow-x-hidden">
+            <div 
+            className="IMG_SLIDER relative mx-auto w-[80%] aspect-video bg-red-300 overflow-hidden">
 
-                <div onClick={next} className="NEXT absolute left-0 top-1/2 h-12 w-10 ml-3
-                bg-green-400 flex justify-center rounded-[5px]  hover:bg-green-600 cursor-pointer">
+            <img 
+             src={images[imgCount]}
+             className="IMAGE flex w-full h-full bg-red-500"
+             />
 
-                    <span className="fa fa-angle-left text-white text-[30px] leading-[48px]"></span>
+                <div 
+                onClick={next} 
+                className="NEXT absolute left-[20px] top-1/2 cursor-pointer"
+                >
+
+                    <span 
+                    className="fa fa-angle-left text-white text-[28px]"
+                    ></span>
                 </div>
 
-                <div onClick={prev} className="PREV absolute right-0 top-1/2 h-12 w-10 mr-3
-                 bg-green-400 flex justify-center rounded-[5px] hover:bg-green-600 cursor-pointer">
+                <div 
+                onClick={prev} 
+                className="PREV absolute right-[20px] top-1/2 cursor-pointer"
+                >
 
-                    <span className="fa fa-angle-right text-white text-[30px] leading-[48px]"></span>
-                </div> 
+                    <span 
+                    className="fa fa-angle-right text-white text-[28px]"
+                    ></span>
+                </div>
 
-                    <img className="IMAGE flex h-[500px] w-full bg-red-500" src={images[imgCount]}/>
+                    
             </div>
         
         </>
