@@ -20,13 +20,13 @@ const Login = () => {
     })
       .then((response) => response.text())
       .then((data) => {
+        console.log(data)
         if (data === '1') {
           alert('Incorrect email');
         } else if (data === '2') {
           alert('Incorrect password');
         } else if (data === '4') {
-
-          window.location.href = appUrl;
+          window.location.href = appUrl + '/user_page';
         }
       })
       .catch((err) => console.log(err));

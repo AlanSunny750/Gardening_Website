@@ -75,7 +75,6 @@ export default Plants
                 about: 'Clusters of flowers that change color based on soil pH.',
                 imageSrc: './src/assets/images/Hydrangea.jpg',
             },
-            // Add more plant objects with name, about, and imageSrc properties
         ];
     
         const [currentPlantIndex, setCurrentPlantIndex] = useState(0);
@@ -97,10 +96,32 @@ export default Plants
     
         return (
             <>
-                <div className="HEAD flex flex-col w-full p-[20px] mt-16 text-[16px] text-center border border-b-4 border-black font-extralight">
-                    <h1 className="text-[44px] font-semibold">Plants</h1>
+                <div 
+                className="HEAD flex flex-col w-full p-[20px] mt-16 text-[16px] 
+                text-center border border-b-4 border-black font-extralight"
+                >
+                    <h1 
+                    className="text-[44px] font-semibold"
+                    >Plants</h1>
                     <p>There are a variety of plants to choose from, for different seasons and different weather conditions</p>
                     <h1>These plants are being rendered from a database where all of them are stored.</h1>
+                    <div 
+                    className="SEARCH flex h-[50px] w-1/4 mx-auto 
+                    border border-gray-400 p-2 mt-[20px] rounded-[15px]">
+                        
+                        <form 
+                         className='h-full w-full'
+                         action="https://www.google.com/search"
+                         method='GET'
+                         >
+                            <input
+                             type="text"
+                             placeholder='Search plants'
+                             className='h-full w-full outline-none p-2 font-mono'
+                             />
+                       </form>
+                        <span className='fas fa-search text-lg leading-[34px] cursor-pointe'></span>
+                    </div>
                 </div>
     
                 <div className="plantsContainer w-[80%] mx-auto mt-16">
