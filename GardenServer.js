@@ -57,13 +57,18 @@ app.post('/login', async (req, res) => {
         console.log(err)
     })
 
-    name = data[0].Name
-    lastName = data[0].LastName
-    pass = data[1].Pass
+    name = data[1].Name
+    lastName = data[1].LastName
+    pass = data[0].Pass
     console.log(data)
     try {
         if(pass == req.body.password) {
             res.send("4") // 'login succeed'
+            app.get('/user_page', (req, res) => {
+                res.send({name, lastName, email})
+                console.log({name, lastName, email})
+            })
+            
         }else {
 
             res.send("2") // 2 = 'Password incorrect'
@@ -73,10 +78,37 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.post('/user_page', (req, res) => {
-    res.send({name, lastName, email})
-    console.log(name, lastName, email)
-})
+
+app.post('/GardenPlanner', (req, res) => {
+    console.log(req.body);
+
+    if (typeof req.body === 'object') {
+        let { inputValue, placedItemsDetails} = req.body;
+
+        let TempStorage = [];
+        TempStorage.push({ inputValue, placedItemsDetails });
+       
+        console.log(TempStorage);
+
+    } else if (typeof req.body === 'string') {
+        let targetString = req.body;
+        let foundValue = null;
+
+
+        for (let item of TempStorage) {
+            if (item.inputValue === targetString) {
+                foundValue = item.placedItemsDetails;
+                break;
+            }
+        }
+
+        if (foundValue) {
+            res.status(200).json({ placedItemsDetails: foundValue });
+        } else {
+            res.status(404).json({ error: 'Matching data not found.' });
+        }
+    }
+});
 
 let port = 3000;
 app.listen(port, console.log(`http://localhost:${port}`))

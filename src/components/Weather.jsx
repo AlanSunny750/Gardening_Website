@@ -71,7 +71,7 @@ function Weather() {
          >Today's Weather</h1>
 
       <input 
-      className='input mt-4'
+      className='input mt-4 text-black p-1'
       type="text"
       placeholder='Current city'
       onChange={(e) => setCity(e.target.value)}

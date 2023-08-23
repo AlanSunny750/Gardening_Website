@@ -105,23 +105,7 @@ export default Plants
                     >Plants</h1>
                     <p>There are a variety of plants to choose from, for different seasons and different weather conditions</p>
                     <h1>These plants are being rendered from a database where all of them are stored.</h1>
-                    <div 
-                    className="SEARCH flex h-[50px] w-1/4 mx-auto 
-                    border border-gray-400 p-2 mt-[20px] rounded-[15px]">
-                        
-                        <form 
-                         className='h-full w-full'
-                         action="https://www.google.com/search"
-                         method='GET'
-                         >
-                            <input
-                             type="text"
-                             placeholder='Search plants'
-                             className='h-full w-full outline-none p-2 font-mono'
-                             />
-                       </form>
-                        <span className='fas fa-search text-lg leading-[34px] cursor-pointe'></span>
-                    </div>
+
                 </div>
     
                 <div className="plantsContainer w-[80%] mx-auto mt-16">
