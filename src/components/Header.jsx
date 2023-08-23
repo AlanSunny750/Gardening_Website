@@ -1,3 +1,4 @@
+import {Link }from 'react-router-dom'
 function Header() {
 
     return(
@@ -20,6 +21,7 @@ function Header() {
                     <br/> and grow virtually! </p>
                 </div>
 
+        <Link to='signup'>
                 <button 
                 className="CTA h-fit w-fit p-3 rounded text-[#2D3748]
                 hover:bg-black hover:text-white border border-gray-400
@@ -30,7 +32,7 @@ function Header() {
                 </svg>
 
             </button>
-
+            </Link>
         </div>
     </div>
 

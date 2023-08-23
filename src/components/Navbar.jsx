@@ -16,6 +16,8 @@ function Navbar() {
         }
     };
 
+    localStorage.setItem('user', 'elham')
+
     useEffect(() => {
         if (isMainLocation) {
             window.addEventListener('scroll', handleScroll);
@@ -48,7 +50,7 @@ function Navbar() {
                     <abbr className='no-underline' title="Garden stash keeps your cash">
                     <div 
                     className="LOGO p-1 text-[18px] ml-4 font-bold border-l-2 border-l-gray-300 pl-2 cursor-pointer"
-                    > Garden Stash </div>
+                    > Green planner </div>
                     </abbr>
                 </div>
                 <div 

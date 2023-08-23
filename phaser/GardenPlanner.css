@@ -2,9 +2,10 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: cursive;
 }
 body {
-    background: rgb(228, 228, 228);
+    background: rgb(196, 201, 194);
 }
 #Canvas {
     position: absolute;
@@ -18,4 +19,133 @@ canvas {
     position: absolute;
     height: 100%;
     width: 100%;
+}
+
+.loadingScreen {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    aspect-ratio: 16/9;
+    background: url(assets/loading_screen.jpg);
+    z-index: 10;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.loading_cont {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.loading {
+    height: 30px;
+    width: 30px;
+    background: transparent;
+    border-top: 5px solid white;
+    border-right: 5px solid white;
+    border-bottom: 5px solid rgb(9, 255, 9);
+    border-left: 5px solid rgb(9, 255, 9);
+    border-radius: 50%;
+    animation: rotate 0.5s infinite linear;
+}
+
+.loading_cont span {
+    margin-top: 10px;
+    color: white;
+    font-family: cursive;
+}
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    } to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+.saveAs {
+    display: flex;
+    gap: 40px;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding: 20px 40px 20px 40px;
+    border: 1px solid black;
+    transition: .15s; 
+    z-index: 6;
+}
+.saveAs:hover {
+    background: rgb(222, 128, 73);
+}
+.saveAs .buttons {
+    display: flex;
+    margin: auto;
+    gap: 50px;
+}
+.saveAs input {
+    padding: 10px;
+    border: 1px solid greenyellow;
+    border-radius: 5px;
+}
+.saveAs input:focus {
+    outline: 1px solid green;
+
+}
+.buttons button {
+    padding: 10px;
+    background: rgb(222, 128, 73);
+    cursor: pointer;
+}
+
+
+.instruction_menu {
+    width: 50%;
+    aspect-ratio: 16/9;
+    background: url(./assets/bg.jpg);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 8;
+}
+
+.instruction_menu .text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: white;
+    text-align: center;
+}
+
+.instruction_menu button{
+    padding: 10px;
+    background: rgb(222, 128, 73);
+    cursor: pointer;
+}
+.btns {
+    display: flex;
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+}
+
+h3 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }

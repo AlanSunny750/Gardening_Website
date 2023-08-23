@@ -7,6 +7,7 @@
 }
 body {
     overflow-x: hidden;
+    background: rgb(240, 235, 235);
 }
 
 body::-webkit-scrollbar {
