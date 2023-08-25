@@ -1,8 +1,15 @@
 url = 'http://localhost:3000';
-const SaveAsMenu = document.querySelector('.saveAs')
+const SaveAsMenu = document.querySelector('.save')
 const SaveButton = document.querySelector('.saveBtn')
 const CancelButton = document.querySelector('.cancelBtn')
-const Input = document.querySelector('.input')
+const Input = document.querySelector('.SaveInput')
+const loadingSaving = document.querySelector('.loadingSaving');
+const text = document.querySelector('.Text');
+const cancelButton = document.querySelector('.CancelBtn')
+const LoadInput = document.querySelector('.LoadInput')
+const LoadMenu = document.querySelector('.load')
+const LoadButton = document.querySelector('.LoadButton')
+const AllSaves = document.querySelector('.Saves');
 
 let SceneContainer = document.getElementById('Canvas'); 
 
@@ -329,35 +336,6 @@ function create(game) {
     let selectedItem = null
 
 
-    function loadItemsFromList(scene, itemsList) {
-
-
-        for (let itemDetails of itemsList) {
-
-            let item = scene.add.image(itemDetails.x, itemDetails.y, itemDetails.imageKey);
-
-            item.angle = itemDetails.rotation;
-            item.setInteractive({ useHandCursor: true });
-
-            placedItems.add(item);
-    
-            item.on('pointerdown', function (pointer) {
-                let offsetX = pointer.x - this.x;
-                let offsetY = pointer.y - this.y;
-    
-                scene.input.on('pointermove', function (pointer) {
-                    this.x = pointer.x - offsetX;
-                    this.y = pointer.y - offsetY;
-                }, this);
-    
-                this.on('pointerup', function () {
-                    scene.input.off('pointermove');
-                });
-            });
-        }
-    }
-
-
     function updateItemDetails(item) {
         for (let itemDetails of placedItemsDetails) {
                 itemDetails.x = item.x;
@@ -370,13 +348,6 @@ function create(game) {
     const itemss = [
         {x: 521.2686446798317, y: 697.8064515513759, imageKey: 'apple_tree', rotation: 180}
     ] 
-    
-    loadButton.on('pointerdown', () => {
-        toggleMenu()
-        placedItems.clear(true, true)
-        loadItemsFromList(this, itemss);
-        placedItemsDetails = []
-    })
 
     function displayItems(scene, category) {
         clearSidebarItems();
@@ -411,11 +382,12 @@ function create(game) {
                 });
     
                 copiedItem.on('pointerup', function () {
+
                     this.clearTint();
                     scene.input.off('pointermove');
     
                     if (selectedItem) {
-                    selectedItem.clearTint();
+                        selectedItem.clearTint();
                     }
     
                     selectedItem = this;
@@ -476,75 +448,148 @@ function create(game) {
             sidebarItems.add(itemName); 
         }
     }
+
+    function loadItemsFromList(scene, itemsList) {
+        for (let itemDetails of itemsList) {
+
+            let item = scene.add.image(itemDetails.x, itemDetails.y, itemDetails.imageKey);
+
+            item.angle = itemDetails.rotation;
+            item.setInteractive({ useHandCursor: true });
+
+            placedItems.add(item);
     
-    deleteKey.on('down', () => deleteItem());
-    rotateKey.on('down', () => rotateItem());
-
-    let email = localStorage.getItem('email');
-
-saveButton.on('pointerdown', () => {
-
-
-    console.log(email);
-
-    // Show the SaveAsMenu
-    SaveAsMenu.style.display = 'flex';
-    toggleMenu()
-    console.log(placedItemsDetails);
-});
-
-
-CancelButton.onclick = (e) => {
-    SaveAsMenu.style.display = 'none';
-};
-
-SaveButton.onclick = (e) => {
+            item.on('pointerdown', function (pointer) {
+                let offsetX = pointer.x - this.x;
+                let offsetY = pointer.y - this.y;
     
-    SaveAsMenu.style.display = 'none';
-
-    let inputValue = Input.value;
-    console.log(inputValue);
-
-    fetch(url + '/GardenPlanner', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ placedItemsDetails, inputValue })
-    })
-    .then(response => response.text())
-    .then(response => console.log(response))
-    .catch(err => console.log(err.message));
-
-};
-
-loadButton.on('pointerdown', () => {
-    toggleMenu()
-    SaveAsMenu.style.display = 'flex';
-    SaveButton.innerHTML = 'Load'
-    Input.placeholder = 'Load by name'
-    SaveButton.classList.add('LoadButton')
-    let LoadButton = document.querySelector('.LoadButton')
+                scene.input.on('pointermove', function (pointer) {
+                    this.x = pointer.x - offsetX;
+                    this.y = pointer.y - offsetY;
+                }, this);
+    
+                this.on('pointerup', function () {
+                    scene.input.off('pointermove');
+                });
+            });
+        }
+    }
 
 
-    LoadButton.on('pointerdown', () => {
+        deleteKey.on('down', () => deleteItem());
+        rotateKey.on('down', () => rotateItem());
+
+        let email = localStorage.getItem('email');
+        let command;
+
+        saveButton.on('pointerdown', () => {
+            console.log(email);
+
+            if (email == undefined || email == ''){
+                alert('please sign in to contenue')
+                return;
+            } else if(placedItemsDetails.length <= 0) {
+                alert('Scene is empty!')
+                return;
+            }
+            // Show the SaveAsMenu
+            SaveAsMenu.style.display = 'flex';
+            toggleMenu()
+            console.log(placedItemsDetails);
+
+            CancelButton.onclick = (e) => {
+                SaveAsMenu.style.display = 'none';
+            };
+
+            SaveButton.onclick = async (e) => {
+
+                let SaveName = Input.value;
+                console.log(SaveName)
+                if(SaveName.length <= 0)  {
+                    alert('please enter a name')
+                } else {
+    
+                    command = 'save'
+    
+                    console.log(SaveName);
+                    SaveAsMenu.style.display = 'none'
+                    loadingSaving.style.display = 'flex'
+                    text.innerHTML = 'Saving'
+    
+                await fetch(url + '/GardenPlanner', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ command, SaveName, placedItemsDetails, email })
+                    })
+                    .then(response => response.text())
+                    .then(response => {
+                        console.log(response)
+                        SaveAsMenu.style.display = 'none'
+                        setTimeout(() => {
+                            loadingSaving.style.display = 'none'
+                        }, 500)
+                    })
+                    .catch(err => console.log(err.message));
+                }
+            };
+        });
+
+
+        loadButton.on('pointerdown', () => {
+
+            if (email == undefined || email == ''){
+                alert('please sign in to contenue')
+                return;
+            }
+
+            LoadMenu.style.display = 'flex'
+            toggleMenu()
+
+            let command = 'load';
             
-    fetch(url + '/GardenPlanner', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-    .then(response => response.text())
-    .then(response => console.log(response))
-    .catch(err => console.log(err.message));
+            cancelButton.onclick = (e) => {
+                LoadMenu.style.display = 'none';
+            };
 
-})
+            LoadButton.onclick = () => {
+                let SaveName = LoadInput.value
+                if(SaveName.length <= 0) {
+                    alert('Please enter the a saved name!')
+                }  else { 
+                    placedItems.clear(true, true)
+                    placedItemsDetails = []
 
-})
+                    loadingSaving.style.display = 'flex'
+                    text.innerHTML = 'Loading'
+
+                    fetch(url + '/GardenPlanner', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ command, SaveName, placedItemsDetails, email })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        LoadMenu.style.display = 'none'
+                        loadItemsFromList(this, data.data)
+
+                        setTimeout(() => {
+                            loadingSaving.style.display = 'none'
+                        }, 500)
+                    })
+                    .catch(err => console.log(err.message));
+                    
+                }
+            }
+        })
 
     displayItems(this, 'plants');
 }
+
 
 function update() {
 

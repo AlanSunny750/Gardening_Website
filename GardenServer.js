@@ -4,13 +4,16 @@ const __dirname = fileURLToPath(import.meta.url);
 import cors from 'cors'
 import { ServerApiVersion, MongoClient } from 'mongodb';
 import path from 'path';
+import { error } from 'console';
+try {
 
 const uri = `mongodb+srv://elham:twoDWAat2@cluster0.whtn1t3.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
 const app = Express()
 
 app.use(Express.json({type: 'application/json'}))
-app.use(Express.static(path.join(__dirname, 'viteDir'), { setHeaders: (res, path, stat) => { res.set('Content-Type', 'text/css'); } }));
+app.use(Express.static(path.join(__dirname, 'viteDir'), 
+{ setHeaders: (res, path, stat) => { res.set('Content-Type', 'text/css'); }}));
 app.use(cors())
 
 
@@ -47,69 +50,90 @@ let name, lastName, email, pass;
 
 app.post('/login', async (req, res) => {
 
-
     email = req.body.email
     console.log(email)
 
-    let data = await client.db('users').collection(email).find().toArray()
-    .catch(err => {
-        res.send("1"); // 1 = 'Incorrect email' 
-        console.log(err)
-    })
-
-    name = data[1].Name
-    lastName = data[1].LastName
-    pass = data[0].Pass
-    console.log(data)
     try {
-        if(pass == req.body.password) {
-            res.send("4") // 'login succeed'
-            app.get('/user_page', (req, res) => {
-                res.send({name, lastName, email})
-                console.log({name, lastName, email})
-            })
-            
-        }else {
+        let data = await client.db('users').collection(email).find().toArray()
 
-            res.send("2") // 2 = 'Password incorrect'
-        }
-    } catch(err) {
-        console.log(err)
-    }
-});
+        name = data[1].Name
+        lastName = data[1].LastName
+        pass = data[0].Pass
+        
+        console.log("user login details :" + data)
 
+        try {
+            if(pass == req.body.password) {
+                res.send("4") // 'login succeed'
 
-app.post('/GardenPlanner', (req, res) => {
-    console.log(req.body);
-
-    if (typeof req.body === 'object') {
-        let { inputValue, placedItemsDetails} = req.body;
-
-        let TempStorage = [];
-        TempStorage.push({ inputValue, placedItemsDetails });
-       
-        console.log(TempStorage);
-
-    } else if (typeof req.body === 'string') {
-        let targetString = req.body;
-        let foundValue = null;
-
-
-        for (let item of TempStorage) {
-            if (item.inputValue === targetString) {
-                foundValue = item.placedItemsDetails;
-                break;
+                app.get('/user_page', (req, res) => {
+                    res.send({name, lastName, email})
+                    console.log({name, lastName, email})
+                });
             }
+            else {
+                res.send("2") // 2 = 'Password incorrect'
+            }
+
+        } catch(err) {
+            console.log(err)
         }
 
-        if (foundValue) {
-            res.status(200).json({ placedItemsDetails: foundValue });
-        } else {
-            res.status(404).json({ error: 'Matching data not found.' });
+    } catch(error) {
+        res.send("1")
+    }
+
+
+});
+
+
+
+
+
+app.post('/GardenPlanner', async (req, res) => {
+    
+    let { SaveName, placedItemsDetails, email} = req.body;
+    console.log(SaveName)
+    
+    if (req.body.command == 'save') {
+        
+        console.log('saving')
+        
+        try {
+            await client.db('users').collection(email).insertOne(
+                {SaveName, data: placedItemsDetails}
+            )
+            res.send('sucess')
+        }catch(err) {
+
+            console.log('save error: ' + err)
+        }
+
+        console.log({SaveName ,data: placedItemsDetails})
+
+
+    } else if (req.body.command == 'load') {
+        console.log('loading')
+
+        try{
+            const result = await client.db('users').collection(email).findOne({SaveName})
+            res.send(JSON.stringify({SaveName: result.SaveName ,data: result.data}))
+            console.log(result.data)
+        } catch(err) {
+            console.log('save error: ' + err, err.code)
         }
     }
 });
+
+
+app.post('/comunity', (req, res) => {
+    const {title, description, image} = req.body
+    console.log(req.body)
+})
 
 let port = 3000;
 app.listen(port, console.log(`http://localhost:${port}`))
 
+} catch(err) {
+    console.log(err)
+}

@@ -33,26 +33,46 @@
 
 
 
-        <div class="saveAs" style="display: none;">
-            <input class="input" type="text" placeholder="Save As" >
+        <div class="save" style="display: none;">
+            <input class="SaveInput" type="text" placeholder="Save As">
             <div class="buttons">
                 <button class="cancelBtn"> Cancel</button>
                 <button class="saveBtn"> Save</button>
             </div>
         </div>
+
+        <div class="load" style="display: none">
+            <div class="loads">
+                <input class="Saved" type="submit" value="dat">
+            </div>
+            <input class="LoadInput" type="text" placeholder="Enter Saved Garden name" >
+            <div class="buttons">
+                <button class="CancelBtn"> Cancel</button>
+                <button class="LoadButton"> Load </button>
+            </div>
+        </div>
+
+        <div class="loadingSaving" style="display: none;">
+            <div class="loading">
+            </div>
+            <span class="Text"> </span>
+        </div>
+
+
     </div>
     <script src="GardenPlanner.js"></script>
 </body>
     <script>
         let next = document.querySelector('.next');
         let prev = document.querySelector('.prev');
+        let instruction_menu = document.querySelector('.instruction_menu')
 
         let slides = [
             "Welcome to the Garden Planner Beta!",
-            "Power: Design your garden with a variety of plants, grounds, and decors.",
+            "Design your garden with a variety of plants, grounds, and decors.",
             "As this is a beta release, we're continuously refining and expanding our features. Your experience today is a glimpse of the exciting capabilities we're building.",
-            "Controls: Press 'R' to rotate items and 'Delete' to remove them.",
-            "The planner allows layering of multiple elements without collision constraints, enabling players to creatively assemble numerous pieces into a cohesive larger design",
+            "Press 'R' to rotate items and 'Delete' to remove them.",
+            "The planner allows layering of multiple elements without collision constraints, enabling you to creatively assemble numerous pieces into a cohesive larger design",
             "We appreciate your feedback and patience as we enhance the Garden Planner. Enjoy planning your garden!"
         ];
         let currentSlide = 0;
@@ -65,7 +85,7 @@
             if (currentSlide === slides.length - 1) {
                 next.innerHTML = "Close";
                 next.addEventListener('click', function() {
-                    document.querySelector('.instruction_menu').style.display = 'none';
+                    instruction_menu.style.display = 'none';
                 });
             } else {
                 next.innerHTML = "Next";
@@ -91,44 +111,38 @@
 
 
 
-       const DOM = {
-            loadingScreen: document.querySelector('.loadingScreen'),
-            loading_what: document.querySelector('.loading_what'),
-            
-            guide_menu: document.querySelector('.guide_menu'),
-            guideNext: document.querySelector('.guideNext'),
-            guidePrev: document.querySelector('.guideNext'),
 
-        }// for all screen sizes
+            const loading_what = document.querySelector('.loading_what')
+            const loadingScreen = document.querySelector('.loadingScreen')
+
+        
         function resizeScene() {
             if(window.innerWidth > window.innerHeight) {
                 SceneContainer.style.height = '100%'
-                DOM.loadingScreen.style.height = '100%'
+                loadingScreen.style.height = '100%'
                 
             } else if(window.innerHeight > window.innerWidth) {
                 SceneContainer.style.width = '100%'
-                DOM.loadingScreen.style.height = '100%'
+                loadingScreen.style.height = '100%'
             }
         }
             const load = () => {
                 setTimeout(() => {
-                DOM.loading_what.innerHTML = 'Loading User Info!'
+                loading_what.innerHTML = 'Loading User Info!'
                 }, 2000)
                 setTimeout(() => {
-                    DOM.loading_what.innerHTML = 'Retriving Saves!'
+                    loading_what.innerHTML = 'Retriving Saves!'
                 }, 3234) 
                 setTimeout(() => {
-                    DOM.loading_what.innerHTML = 'Loading assets!'
+                    loading_what.innerHTML = 'Loading assets!'
                 }, 4566)
                 setTimeout(() => {
-                    DOM.loading_what.innerHTML = 'Loading nothing!'
+                    loading_what.innerHTML = 'Loading nothing!'
                 }, 5343)
                 setTimeout(() => {
-                    DOM.loadingScreen.style.display = 'none'
+                    loadingScreen.style.display = 'none'
+                    instruction_menu.style.display = 'flex'
                 }, 7345)
-                setTimeout(() => {
-                    document.querySelector('.instruction_menu').style.display = 'flex'
-                }, 8000)
             }
 
 
